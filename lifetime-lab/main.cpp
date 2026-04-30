@@ -1,5 +1,7 @@
 #include "lifetime.hpp"
 #include <utility>
+#include <expected>
+#include <string_view>
 
 void bad_move_example(){
     
@@ -19,7 +21,23 @@ void move_using_RVO(){
     };
 
     Lifetime x = make_lifetime(4);
+}
 
+std::expected<Lifetime, std::string_view> badExpectedReturn(){
+    return Lifetime{};
+}
+
+void bad_expected_RVO(){
+    std::expected<Lifetime, std::string_view> x = badExpectedReturn();
+}
+
+std::expected<Lifetime, std::string_view> goodExpectedReturn(){
+    std::puts("using emplace for ctor");
+    return {};
+}
+
+void good_expected_RVO(){
+    std::expected<Lifetime, std::string_view> x = goodExpectedReturn();
 }
 
 int main(){
@@ -29,6 +47,14 @@ int main(){
 
     std::puts("move_using_RVO:");
     move_using_RVO();
+    std::puts("");
+
+    std::puts("bad_expected_RVO:");
+    bad_expected_RVO();
+    std::puts("");
+
+    std::puts("good_expected_RVO:");
+    good_expected_RVO();
     std::puts("");
 
     return 0;
