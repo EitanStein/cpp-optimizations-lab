@@ -1,7 +1,4 @@
-#include "lifetime.hpp"
-#include <utility>
-#include <expected>
-#include <string_view>
+#include "lifetime_lambda_lab.hpp"
 
 void bad_move_example(){
     
@@ -40,6 +37,10 @@ void good_expected_RVO(){
     std::expected<Lifetime, std::string_view> x = goodExpectedReturn();
 }
 
+
+
+
+
 int main(){
     std::puts("bad move example:");
     bad_move_example();
@@ -56,6 +57,8 @@ int main(){
     std::puts("good_expected_RVO:");
     good_expected_RVO();
     std::puts("");
+
+    lifetime_and_lambda_demo();
 
     return 0;
 }
