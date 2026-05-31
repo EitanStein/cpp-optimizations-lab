@@ -5,7 +5,7 @@
 #include <expected>
 #include <string_view>
 
-namespace lambda_lab {
+namespace LambdaLab {
     Lifetime getLife1() { return Lifetime{}; }
     Lifetime getLife2() { return getLife1(); }
     Lifetime getLife3() { return getLife2(); }

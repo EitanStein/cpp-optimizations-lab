@@ -5,7 +5,7 @@
 #include <expected>
 #include <string_view>
 
-namespace RVO_lab{
+namespace RVOLab{
     void bad_move_example(){
         
         Lifetime x;

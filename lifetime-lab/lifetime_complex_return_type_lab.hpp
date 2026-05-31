@@ -8,7 +8,7 @@
 
 #include <optional>
 
-namespace complex_return_type {
+namespace ComplexReturnType {
     std::optional<std::pair<int, Lifetime>> getLife1(){
         puts("Lifetime l; return std::pair{1, std::move(l)};");
         Lifetime l;
