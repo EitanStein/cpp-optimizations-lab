@@ -4,6 +4,7 @@
 struct Lifetime
 {
     Lifetime() {std::puts("liftime() // default ctor");}
+    Lifetime(int) {std::puts("liftime() // custom ctor");}
     Lifetime(const Lifetime&) {std::puts("liftime(const Lifetime&) // copy ctor");}
     Lifetime(Lifetime&&) {std::puts("liftime(Lifetime&&) // move ctor");}
 
