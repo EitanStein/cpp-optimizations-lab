@@ -27,3 +27,4 @@ endif()
 
 
 add_executable(lifetime_lab lifetime-lab/main.cpp)
+add_executable(object_size_lab object-size-lab/main.cpp)
