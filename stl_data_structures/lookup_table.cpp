@@ -36,6 +36,7 @@ struct MyStruct{
 static void BM_vector_linear_lookup(benchmark::State& state){
     const int size = state.range(0);
     std::vector<MyStruct> arr;
+    arr.reserve(size);
 
     for(int val : init_rand_vector(size)){
         arr.emplace_back(val);
@@ -50,13 +51,14 @@ static void BM_vector_linear_lookup(benchmark::State& state){
         }
     }
 }
-BENCHMARK(BM_vector_linear_lookup)->RangeMultiplier(2)->Range(4,4096);
+BENCHMARK(BM_vector_linear_lookup)->RangeMultiplier(2)->Range(1024,4096);
 
 
 
 static void BM_vector_binary_search(benchmark::State& state){
     const int size = state.range(0);
     std::vector<MyStruct> arr;
+    arr.reserve(size);
 
     for(int val : std::views::iota(0, size)){
         arr.emplace_back(val);
@@ -71,7 +73,7 @@ static void BM_vector_binary_search(benchmark::State& state){
         }
     }
 }
-BENCHMARK(BM_vector_binary_search)->RangeMultiplier(2)->Range(4,4096);
+BENCHMARK(BM_vector_binary_search)->RangeMultiplier(2)->Range(1024,4096);
 
 
 
@@ -92,7 +94,7 @@ static void BM_map(benchmark::State& state){
         }
     }
 }
-BENCHMARK(BM_map)->RangeMultiplier(2)->Range(4,4096);
+BENCHMARK(BM_map)->RangeMultiplier(2)->Range(1024,4096);
 
 
 
@@ -113,7 +115,7 @@ static void BM_unordered_map(benchmark::State& state){
         }
     }
 }
-BENCHMARK(BM_unordered_map)->RangeMultiplier(2)->Range(4,4096);
+BENCHMARK(BM_unordered_map)->RangeMultiplier(2)->Range(1024,4096);
 
 
 
@@ -134,7 +136,63 @@ static void BM_flat_map(benchmark::State& state){
         }
     }
 }
-BENCHMARK(BM_flat_map)->RangeMultiplier(2)->Range(4,4096);
+BENCHMARK(BM_flat_map)->RangeMultiplier(2)->Range(1024,4096);
+
+
+
+static void BM_iterating_flat_map(benchmark::State& state){
+    const int size = state.range(0);
+    std::flat_map<int, MyStruct> my_map;
+
+    for(int val : init_rand_vector(size)){
+        my_map[val] = MyStruct{val*2};
+    }
+
+    for(auto _ : state){
+        for(const auto& val : my_map){
+            auto result = val.second;
+            benchmark::DoNotOptimize(result);
+        }
+    }
+}
+BENCHMARK(BM_iterating_flat_map)->RangeMultiplier(2)->Range(1024,4096);
+
+
+static void BM_iterating_unordered_map(benchmark::State& state){
+    const int size = state.range(0);
+    std::unordered_map<int, MyStruct> my_map;
+
+    for(int val : init_rand_vector(size)){
+        my_map[val] = MyStruct{val*2};
+    }
+
+    for(auto _ : state){
+        for(const auto& val : my_map){
+            auto result = val.second;
+            benchmark::DoNotOptimize(result);
+        }
+    }
+}
+BENCHMARK(BM_iterating_unordered_map)->RangeMultiplier(2)->Range(1024,4096);
+
+
+static void BM_iterating_vector(benchmark::State& state){
+    const int size = state.range(0);
+    std::vector<MyStruct> arr;
+    arr.reserve(size);
+
+    for(int val : std::views::iota(0, size)){
+        arr.emplace_back(val);
+    }
+
+    for(auto _ : state){
+        for(auto val : arr){
+            auto result = val;
+            benchmark::DoNotOptimize(result);
+        }
+    }
+}
+BENCHMARK(BM_iterating_vector)->RangeMultiplier(2)->Range(1024,4096);
 
 
 BENCHMARK_MAIN();
