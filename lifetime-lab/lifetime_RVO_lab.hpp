@@ -11,8 +11,7 @@ namespace RVOLab{
         Lifetime x;
         x.member_data = 4;
 
-        Lifetime y = std::move(x);
-        std::puts("will call 2 dtors");
+        Lifetime y = std::move(x); // ctor and move ctor
     }
 
 
@@ -20,14 +19,15 @@ namespace RVOLab{
         auto make_lifetime = [](const int val) -> Lifetime{
             Lifetime l;
             l.member_data = val;
-            return l;
+            return l; // NRVO
         };
 
-        Lifetime x = make_lifetime(4);
+        Lifetime x = make_lifetime(4); // one ctor
     }
 
     std::expected<Lifetime, std::string_view> badExpectedReturn(){
-        return Lifetime{};
+        return Lifetime{}; // multiple ctors from building since we build lifetime and then copy into the expected
+        // the expected value is then returned with URVO
     }
 
     void bad_expected_RVO(){
@@ -36,7 +36,7 @@ namespace RVOLab{
 
     std::expected<Lifetime, std::string_view> goodExpectedReturn(){
         std::puts("using emplace for ctor");
-        return {};
+        return {}; // only a single ctor
     }
 
     void good_expected_RVO(){
